@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firbase_test/screens/home.dart';
+import 'package:firbase_test/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +15,12 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool loading = false;
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -105,18 +113,33 @@ class _LoginState extends State<Login> {
                       height: 55,
                       width: double.infinity,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            setState(() => loading = true);
+                            final res = await AuthService().LoginFunciton(
+                                emailController.text, passwordController.text);
+
+                            setState(() => loading = false);
+
+                            if (res == 'Success') {
+                              Navigator.pushReplacement(context,
+                                  MaterialPageRoute(builder: (_) => Home()));
+                            } else {
+                              showMessage(res);
+                              print(res);
+                            }
+                          },
                           child: Text(
                             'Login'.toUpperCase(),
                             style: TextStyle(fontSize: 20),
                           ))),
                 ),
                 SizedBox(
-                  height: 16,
+                  height: 24,
                 ),
+                //do you have an account
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+                  children: const [
                     Text(
                       'Don\'t have an account? ',
                       style: TextStyle(
@@ -129,9 +152,65 @@ class _LoginState extends State<Login> {
                     Text(
                       'Sign Up',
                       style: TextStyle(
-                        color: Colors.white,
-                      ),
+                          color: Colors.white, fontWeight: FontWeight.bold),
                     ),
+                  ],
+                ),
+                // accounts
+                SizedBox(
+                  height: 24,
+                ),
+                Text(
+                  'Sign up with Social Networks',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  height: 24,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue[900]),
+                        onPressed: () {},
+                        child: Text(
+                          'F',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        )),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.orange[900]),
+                        onPressed: () {},
+                        child: Text(
+                          'G+',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        )),
+                    SizedBox(
+                      width: 24,
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black),
+                        onPressed: () {},
+                        child: Text(
+                          'X',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
+                        )),
                   ],
                 )
               ],

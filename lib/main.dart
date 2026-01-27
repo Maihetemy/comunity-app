@@ -1,4 +1,6 @@
 import 'package:firbase_test/screens/login_screen.dart';
+import 'package:firbase_test/screens/signup_screen.dart';
+import 'package:firbase_test/screens/splash_screen.dart';
 import 'package:firbase_test/screens/test-screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      home: Splash(),
     );
   }
 }
