@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:firbase_test/screens/home.dart';
+import 'package:firbase_test/screens/signup_screen.dart';
 import 'package:firbase_test/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,8 @@ class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   bool loading = false;
+  bool isScure = true;
+
   void showMessage(String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
@@ -79,6 +82,7 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 30),
                   child: TextField(
+                    obscureText: isScure,
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -88,6 +92,16 @@ class _LoginState extends State<Login> {
                         //   hintStyle: TextStyle(
                         //   color: Colors.white,
                         // ),
+                        suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                isScure = !isScure;
+                              });
+                            },
+                            icon: Icon(
+                              isScure ? Icons.visibility : Icons.visibility_off,
+                              color: Colors.white,
+                            )),
                         labelText: 'Password',
                         labelStyle: TextStyle(
                           color: Colors.white,
@@ -116,7 +130,8 @@ class _LoginState extends State<Login> {
                           onPressed: () async {
                             setState(() => loading = true);
                             final res = await AuthService().LoginFunciton(
-                                emailController.text, passwordController.text);
+                                emailController.text.trim(),
+                                passwordController.text.trim());
 
                             setState(() => loading = false);
 
@@ -139,7 +154,7 @@ class _LoginState extends State<Login> {
                 //do you have an account
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
+                  children: [
                     Text(
                       'Don\'t have an account? ',
                       style: TextStyle(
@@ -149,11 +164,16 @@ class _LoginState extends State<Login> {
                     SizedBox(
                       width: 8,
                     ),
-                    Text(
-                      'Sign Up',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (_) => Signup()));
+                        },
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        )),
                   ],
                 ),
                 // accounts

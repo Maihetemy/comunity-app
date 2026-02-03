@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firbase_test/screens/login_screen.dart';
+import 'package:firbase_test/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +16,13 @@ class _SignupState extends State<Signup> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
+  void showMessage(String message) {
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  bool isScure = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +72,7 @@ class _SignupState extends State<Signup> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: TextField(
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 75, 6, 87),
                   ),
                   controller: emailController,
                   decoration: InputDecoration(
@@ -89,13 +98,21 @@ class _SignupState extends State<Signup> {
               ),
               //password textfield
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: 30),
                 child: TextField(
+                  obscureText: isScure,
                   style: TextStyle(
-                    color: Colors.white,
+                    color: Color.fromARGB(255, 75, 6, 87),
                   ),
                   controller: passwordController,
                   decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              isScure = !isScure;
+                            });
+                          },
+                          icon: Icon(isScure ? Icons.visibility: Icons.visibility_off)),
                       labelText: 'Password',
                       labelStyle: TextStyle(
                         color: Color.fromARGB(255, 75, 6, 87),
@@ -123,20 +140,30 @@ class _SignupState extends State<Signup> {
                     width: double.infinity,
                     child: Container(
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(100),
                           gradient: const LinearGradient(
                               colors: [
-                            Colors.purple,
-                            Color.fromARGB(255, 72, 33, 243)
-                          ],
+                                Colors.purple,
+                                Color.fromARGB(255, 72, 33, 243)
+                              ],
                               begin: Alignment.centerRight,
                               end: Alignment.centerLeft)),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent),
-                          onPressed: () {},
+                          onPressed: () async {
+                            //mai@gmail.com
+                            final res = await AuthService().signupFunction(
+                                emailController.text.trim(),
+                                passwordController.text.trim());
+                            if (res == 'Success') {
+                              Navigator.pop(context);
+                            } else {
+                              showMessage(res);
+                            }
+                          },
                           child: Text(
-                            'Login'.toUpperCase(),
+                            'Sign Up'.toUpperCase(),
                             style: TextStyle(fontSize: 20, color: Colors.white),
                           )),
                     )),
@@ -147,24 +174,27 @@ class _SignupState extends State<Signup> {
               //do you have an account
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
-                    'Don\'t have an account? ',
+                    'Do have an account? ',
                     style: TextStyle(
-                      color: Color.fromARGB(255, 75, 6, 87),
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: Color.fromARGB(255, 75, 6, 87),
+                        fontWeight: FontWeight.bold),
                   ),
                   SizedBox(
                     width: 8,
                   ),
-                  Text(
-                    'Sign Up',
-                    style: TextStyle(
-                      color: Color.fromARGB(255, 75, 6, 87),
-                      fontWeight: FontWeight.bold
-                    ),
-                  ),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => Login()));
+                      },
+                      child: Text(
+                        'Login',
+                        style: TextStyle(
+                            color: Color.fromARGB(255, 75, 6, 87),
+                            fontWeight: FontWeight.bold),
+                      )),
                 ],
               ),
               // accounts
@@ -174,9 +204,8 @@ class _SignupState extends State<Signup> {
               Text(
                 'Sign up with Social Networks',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 75, 6, 87),
-                  fontWeight: FontWeight.bold
-                ),
+                    color: Color.fromARGB(255, 75, 6, 87),
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(
                 height: 24,

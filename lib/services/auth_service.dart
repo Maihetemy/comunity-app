@@ -14,6 +14,22 @@ class AuthService {
       return e.message ?? 'Login Failed';
     }
   }
+
+  // ===============================Signup=============================
+  Future<String> signupFunction(String email, String password) async {
+    try {
+      await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      return 'Success';
+    } on FirebaseAuthException catch (e) {
+      return e.message ?? 'Signup Failed';
+    }
+  }
+
+  // ===============================Logout=============================
+  Future<void> logout() async{
+    await _auth.signOut();
+  }
 }
 
 
