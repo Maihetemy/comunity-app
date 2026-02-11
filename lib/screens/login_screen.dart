@@ -1,6 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:firbase_test/screens/home.dart';
+import 'package:firbase_test/screens/layout.dart';
 import 'package:firbase_test/screens/signup_screen.dart';
 import 'package:firbase_test/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
@@ -137,7 +137,7 @@ class _LoginState extends State<Login> {
 
                             if (res == 'Success') {
                               Navigator.pushReplacement(context,
-                                  MaterialPageRoute(builder: (_) => Home()));
+                                  MaterialPageRoute(builder: (_) => LayoutScreen()));
                             } else {
                               showMessage(res);
                               print(res);
