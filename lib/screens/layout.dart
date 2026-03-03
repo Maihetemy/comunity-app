@@ -44,12 +44,16 @@ class _LayoutScreenState extends State<LayoutScreen> {
               ))
         ],
       ),
+      
+      // ==============================
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
       ),
+      // ==============================
+
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -60,10 +64,6 @@ class _LayoutScreenState extends State<LayoutScreen> {
             icon: Icon(Icons.add),
             label: 'Add Post',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.school),
-          //   label: 'School',
-          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.purple,
